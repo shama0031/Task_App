@@ -1,5 +1,6 @@
 package com.example.task_app.ui.home
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.task_app.App
 import com.example.task_app.R
 import com.example.task_app.databinding.FragmentHomeBinding
 import com.example.task_app.model.Task
@@ -24,7 +26,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val adapter = TaskAdapter()
+    private val adapter = TaskAdapter(this::onClick)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,20 +34,34 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.adapter = adapter
-        setFragmentResultListener(TaskFragment.TASK_REQUEST_KEY){_, bundle ->
-            val task = bundle.getSerializable(TaskFragment.TASK_KEY) as Task
-            adapter.addTask(task)
-        }
+        setData()
         fab.setOnClickListener {
             findNavController().navigate(R.id.taskFragment)
         }
+    }
+
+    private fun onClick(task: Task) {
+        val alert = AlertDialog.Builder(requireContext())
+        alert.setTitle(getString(R.string.delete_title))
+        alert.setPositiveButton(getString(R.string.yes)) { d, _ ->
+            App.db.taskDao().delete(task)
+            setData()
+        }
+        alert.setNegativeButton(getString(R.string.no)) { d, _ ->
+            d.cancel()
+        }
+        alert.create().show()
+    }
+    private fun setData(){
+        val tasks = App.db.taskDao().getAll()
+        adapter.addTasks(tasks)
     }
 
     override fun onDestroyView() {
