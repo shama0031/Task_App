@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -26,7 +27,12 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val adapter = TaskAdapter(this::onClick)
+    private val adapter = TaskAdapter(this::onClick, this::onClickUpdate)
+
+    private fun onClickUpdate(task: Task) {
+        val bundle = bundleOf("Key12" to task)
+        findNavController().navigate(R.id.taskFragment, bundle)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +65,8 @@ class HomeFragment : Fragment() {
         }
         alert.create().show()
     }
-    private fun setData(){
+
+    private fun setData() {
         val tasks = App.db.taskDao().getAll()
         adapter.addTasks(tasks)
     }

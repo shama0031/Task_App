@@ -16,6 +16,7 @@ import com.example.task_app.model.Task
 class TaskFragment : Fragment() {
 
     private lateinit var binding: FragmentTaskBinding
+    private var task: Task? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,13 +28,31 @@ class TaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnSave.setOnClickListener {
-            val task = Task(
-                title = binding.etTitle.text.toString(),
-                desc = binding.etDesc.text.toString()
-            )
-            App.db.taskDao().insert(task)
-            findNavController().navigateUp()
+        task = arguments?.getSerializable("Key12") as Task?
+        binding.etTitle.setText(task?.title)
+        binding.etDesc.setText(task?.title)
+
+        if (task != null) {
+            binding.btnSave.text = "Update"
+            binding.btnSave.setOnClickListener {
+                val task = task?.copy(
+                    title = binding.etTitle.text.toString(),
+                    desc = binding.etDesc.text.toString()
+
+                )
+                App.db.taskDao().update(task!!)
+                findNavController().navigateUp()
+            }
+        } else {
+            binding.btnSave.setOnClickListener {
+                val task = Task(
+                    title = binding.etTitle.text.toString(),
+                    desc = binding.etDesc.text.toString()
+
+                )
+                App.db.taskDao().insert(task)
+                findNavController().navigateUp()
+            }
         }
     }
 
