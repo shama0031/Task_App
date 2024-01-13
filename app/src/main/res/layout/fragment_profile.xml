@@ -4,11 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
+    
 
-    <EditText
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_name"
-        android:hint="name"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:id="@+id/txtInL">
+
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:textColor="@color/black"
+            android:hint="Name"/>
+
+        <!--<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="#CDCDCE"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Label"
+            android:textColor="#741c7a"/>-->
+    </com.google.android.material.textfield.TextInputLayout>
+
 </FrameLayout>
