@@ -37,6 +37,16 @@
         android:name="com.example.task_app.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/phoneFragment"
+        android:name="com.example.task_app.ui.auth.phone.PhoneFragment"
+        android:label="fragment_phone"
+        tools:layout="@layout/fragment_phone" />
+    <fragment
+        android:id="@+id/verifyFragment"
+        android:name="com.example.task_app.ui.auth.verify.VerifyFragment"
+        android:label="fragment_verify"
+        tools:layout="@layout/fragment_verify" />
 
 
 </navigation>
